@@ -11,5 +11,10 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended",
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts", "src/**/*.test.ts", "src/utils"]
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx"
+  ]
 }
