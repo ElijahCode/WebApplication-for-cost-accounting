@@ -10,24 +10,35 @@ declare interface CostHistoryItem {
 interface IProtoCategory {
   name: string;
   costSum: number;
-  parentCategory: ICategory | null;
-  childCategory: ICategory[] | null;
+  parentCategory: Category | null;
+  childCategory: Category[] | null;
   costHistory: CostHistoryItem[];
-  public setParent(parent: ICategory): void;
-  public getParent(): ICategory | null;
-  public getChilds(): ICategory[] | null;
-  public addChilds(...categories: ICategory[]): ICategory[];
-  public removeChild(category: ICategory): ICategory[] | null;
+  public setParent(parent: Category): void;
+  public getParent(): Category | null;
+  public getChilds(): Category[] | null;
+  public addChilds(...categories: Category[]): Category[];
+  public removeChild(category: Category): Category[] | null;
   public changeCostSum(newCost: number, date?: number): void;
   public getCostSum(): number;
   protected updateParentCostSum(diffCostSum: number, date?: number): void;
   public setName(newName: string): void;
   public getName(): string;
-  protected addCost(newCost: CostHistoryItem): void;
+  public addCost(newCost: CostHistoryItem): void;
   public getCostHistory(): CostHistoryItem[];
 }
 
 declare interface IState {
   user: string;
-  categoriesOfCost: ICategory[] | null;
+  categoriesOfCost: Category[] | null;
+}
+
+declare interface ActionsAddCategoryPayload {
+  category: Category;
+  parent?: Category;
+}
+
+declare interface ActionsAddCostPayload {
+  cost: number;
+  date: number;
+  category: Category;
 }

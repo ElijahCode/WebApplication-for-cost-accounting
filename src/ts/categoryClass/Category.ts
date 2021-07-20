@@ -1,46 +1,46 @@
 export class Category implements ICategory {
-  protected name: string;
+  private name: string;
 
-  protected costSum;
+  private costSum;
 
-  protected parentCategory: ICategory | null;
+  private parentCategory: Category | null;
 
-  protected childCategory: ICategory[] | null;
+  private childCategory: Category[] | null;
 
-  protected costHistory: CostHistoryItem[];
+  private costHistory: CostHistoryItem[];
 
-  constructor(categoryName = "", parent: ICategory | null = null) {
+  constructor(categoryName = "", parent: Category | null = null) {
     this.name = categoryName;
     this.costSum = 0;
     this.parentCategory = parent;
     this.childCategory = null;
     this.costHistory = [];
     if (parent) {
-      parent.addChilds(this as unknown as ICategory);
+      parent.addChilds(this as unknown as Category);
     }
   }
 
-  public setParent(parent: ICategory): void {
+  public setParent(parent: Category): void {
     this.parentCategory = parent;
   }
 
-  public getParent(): ICategory | null {
+  public getParent(): Category | null {
     return this.parentCategory;
   }
 
-  public getChilds(): ICategory[] | null {
+  public getChilds(): Category[] | null {
     return this.childCategory;
   }
 
-  public addChilds(...categories: ICategory[]): ICategory[] {
+  public addChilds(...categories: Category[]): Category[] {
     const childs = this.childCategory === null ? [] : [...this.childCategory];
     const newChilds = childs.concat(categories);
     this.childCategory = newChilds;
-    childs.forEach((child) => child.setParent(this as unknown as ICategory));
+    childs.forEach((child) => child.setParent(this as unknown as Category));
     return newChilds;
   }
 
-  public removeChild(category: ICategory): ICategory[] {
+  public removeChild(category: Category): Category[] {
     const childs = this.childCategory === null ? [] : [...this.childCategory];
     const newChilds = childs.filter(
       (el) => el.getName() !== category.getName()
@@ -76,7 +76,7 @@ export class Category implements ICategory {
     this.name = newName;
   }
 
-  protected addCost(newCost: CostHistoryItem): void {
+  public addCost(newCost: CostHistoryItem): void {
     this.costHistory.push(newCost);
   }
 

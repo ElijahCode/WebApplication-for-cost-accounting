@@ -12,5 +12,5 @@ module.exports = {
     },
   },
   moduleFileExtensions: ["js", "json", "jsx", "ts", "d.ts", "tsx", "node"],
-  testEnvironment: 'jsdom'
+  testEnvironment: "jsdom",
 };
