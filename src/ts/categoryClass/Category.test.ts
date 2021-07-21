@@ -132,4 +132,39 @@ describe("Testing Category Class", () => {
 
     expect(parentCategory.getName()).toBe("category0");
   });
+
+  it("Testing convertToStateCategory", () => {
+    const result1 = {
+      name: "parentCategory",
+      cost: 0,
+      costHistory: [],
+      parentName: null,
+      childs: ["category1", "category2"],
+    };
+    const result2 = {
+      name: "category1",
+      cost: 0,
+      costHistory: [],
+      parentName: "parentCategory",
+      childs: [],
+    };
+    const result3 = {
+      name: "category2",
+      cost: 0,
+      costHistory: [],
+      parentName: "parentCategory",
+      childs: ["category3"],
+    };
+    const result4 = {
+      name: "category3",
+      cost: 0,
+      costHistory: [],
+      parentName: "category2",
+      childs: [],
+    };
+    expect(parentCategory.convertToStateCategory()).toStrictEqual(result1);
+    expect(category1.convertToStateCategory()).toStrictEqual(result2);
+    expect(category2.convertToStateCategory()).toStrictEqual(result3);
+    expect(category3.convertToStateCategory()).toStrictEqual(result4);
+  });
 });

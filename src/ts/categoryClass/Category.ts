@@ -36,7 +36,7 @@ export class Category implements ICategory {
     const childs = this.childCategory === null ? [] : [...this.childCategory];
     const newChilds = childs.concat(categories);
     this.childCategory = newChilds;
-    childs.forEach((child) => child.setParent(this as unknown as Category));
+    categories.forEach((child) => child.setParent(this as unknown as Category));
     return newChilds;
   }
 
@@ -83,5 +83,25 @@ export class Category implements ICategory {
   public getCostHistory(): CostHistoryItem[] {
     const costHistory = [...this.costHistory];
     return costHistory;
+  }
+
+  public convertToStateCategory(): IStateCategory {
+    const childs: string[] = [];
+    const parentName: string | null = this.parentCategory
+      ? this.parentCategory.getName()
+      : null;
+    if (this.childCategory) {
+      this.childCategory.forEach((child) => {
+        childs.push(child.getName());
+      });
+    }
+    const result = {
+      name: this.name,
+      cost: this.costSum,
+      costHistory: [...this.costHistory],
+      parentName,
+      childs,
+    };
+    return result;
   }
 }
