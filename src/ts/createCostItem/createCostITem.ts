@@ -1,7 +1,7 @@
-import { uuid } from "uuidv4";
+import uniqid from "uniqid";
 
 export function createCostItem(cost: number, date: number): CostHistoryItem {
-  const id = uuid();
+  const id = uniqid();
   return {
     cost,
     date,

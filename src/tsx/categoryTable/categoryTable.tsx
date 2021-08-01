@@ -158,6 +158,7 @@ class CategoryTableWithoutConnect extends React.Component<
               <p>
                 {parentsIndex.join(".")}.{index + 1}
               </p>
+              <p>Category name: {child.name}</p>
               <p>Total cost:{child.cost}</p>
               <button
                 onClick={this.addCategoryButtonClick}
@@ -239,6 +240,7 @@ class CategoryTableWithoutConnect extends React.Component<
                 data-testid="categoryItemSubBlock"
               >
                 <p>{index + 1}</p>
+                <p>Category name: {category.name}</p>
                 <p>Total cost:{category.cost}</p>
                 <button
                   onClick={this.addCategoryButtonClick}

@@ -18,9 +18,9 @@ export class App extends React.Component {
           <Link to="/about">About</Link>
           <Link to="/login">Log in</Link>
           <Link to="/registration">Registration</Link>
-          <Link to="/costTable"></Link>
-          <Link to="/categoryTable"></Link>
-          <Link to="/chart"></Link>
+          <Link to="/costTable">Costs Table</Link>
+          <Link to="/categoryTable">Categories Table</Link>
+          <Link to="/chart">Chart</Link>
         </div>
         <Switch>
           <Route exact path="/">
@@ -36,6 +36,18 @@ export class App extends React.Component {
             <Registration />
           </Route>
           <Route path="/costTable">
+            <CostTable />
+          </Route>
+          <Route path="/cost_table_for_last_week">
+            <CostTable />
+          </Route>
+          <Route path="/cost_table_all">
+            <CostTable />
+          </Route>
+          <Route path="/cost_table_for last month">
+            <CostTable />
+          </Route>
+          <Route path="/cost_table_for_last_year">
             <CostTable />
           </Route>
           <Route path="/categoryTable">

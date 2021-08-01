@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Chart from "react-google-charts";
 
-type ChartData = [IStateCategory["name"], IStateCategory["cost"]];
+type ChartData = [string, string | number];
 
 interface IChartBlockState {
   categories: IStateCategory[];
@@ -18,11 +18,12 @@ class ChartBlockWithoutStore extends React.Component<any, IChartBlockState> {
         acc.push(newItem);
         return acc;
       },
-      []
+      [["Category", "Costs"]]
     ),
   };
 
   render(): JSX.Element {
+    console.log(this.state.chartData);
     const layout = (
       <Chart
         width={"500px"}

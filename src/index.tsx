@@ -2,10 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { App } from "./app/app";
-import { reducer } from "../ts/reducer/reducer";
-import { categoryCreator } from "../ts/categoryCreator/categoryCreator";
-import { createCostItem } from "../ts/createCostItem/createCostITem";
+import { App } from "./tsx/app/app";
+import { reducer } from "./ts/reducer/reducer";
+import { categoryCreator } from "./ts/categoryCreator/categoryCreator";
+import { createCostItem } from "./ts/createCostItem/createCostITem";
+
+console.log("!!!!!!!!!!!!!!!!1");
 
 const category1 = categoryCreator("Category1");
 const category2 = categoryCreator("Category2");

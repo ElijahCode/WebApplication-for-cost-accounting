@@ -1,7 +1,7 @@
-import { uuid } from "uuidv4";
+import uniqid from "uniqid";
 
 export function categoryCreator(name: string): IStateCategory {
-  const id = uuid();
+  const id = uniqid();
   return {
     name,
     cost: 0,

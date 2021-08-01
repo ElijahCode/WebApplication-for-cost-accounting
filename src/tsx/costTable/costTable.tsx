@@ -37,7 +37,7 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
     beginDate: this.setDefaultBeginDate(),
     lastDate: this.setDefaultLastDate(),
     addCostCost: 0,
-    addCostDate: 0,
+    addCostDate: Date.now(),
     addCostCategoryName: "",
     addCostDateInputValue: this.setDefaultDateForAddCost(),
     renderingCosts: this.props.categoriesOfCost.reduce(
@@ -134,7 +134,7 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
     this.setState({
       costHistory: newCostHistory,
       addCostCost: 0,
-      addCostDate: new Date(Date.now()).valueOf(),
+      addCostDate: Date.now(),
       addCostCategoryName: "",
       addCostDateInputValue: this.setDefaultDateForAddCost(),
       renderingCosts: newCostHistory,
@@ -174,7 +174,6 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
   onLastWeekLinkClick = (): void => {
     const todayDate = new Date(Date.now());
     const weekAgo = todayDate.setDate(todayDate.getDate() - 7).valueOf();
-    // this.state.costHistory.forEach((e) => console.log(e.date > weekAgo))
     this.setState({
       renderingCosts: this.state.costHistory.filter(
         (costItem: CostHistoryItem) => costItem.date >= weekAgo
@@ -251,6 +250,7 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
             type="text"
             value={this.state.addCostDateInputValue}
             onChange={this.onAddCostDateChange}
+            className={"addCost_DateInput"}
             data-testid="AddCostDateInput"
           />{" "}
           <p data-testid="addCostCategoryNameParag">CategoryName:</p>
@@ -268,7 +268,23 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
           <tbody>
             {this.state.renderingCosts.map((costItem: CostHistoryItem) => {
               const costDate = new Date(costItem.date);
-              const renderCostDate = `${costDate.getDate()}.${costDate.getMonth()}-${costDate.getFullYear()} ${costDate.getHours()}:${costDate.getMinutes()}`;
+              const costDateMinutes =
+                costDate.getMinutes() > 9
+                  ? costDate.getMinutes()
+                  : `0${costDate.getMinutes()}`;
+              const costDateHours =
+                costDate.getHours() > 9
+                  ? costDate.getHours()
+                  : `0${costDate.getHours()}`;
+              const costDateDay =
+                costDate.getDate() > 9
+                  ? costDate.getDate()
+                  : `0${costDate.getDate()}`;
+              const costDateMonth =
+                costDate.getMonth() > 9
+                  ? costDate.getMonth()
+                  : `0${costDate.getMonth()}`;
+              const renderCostDate = `${costDateDay}.${costDateMonth}.${costDate.getFullYear()} ${costDateHours}:${costDateMinutes}`;
               return (
                 <tr
                   id={costItem.id}
