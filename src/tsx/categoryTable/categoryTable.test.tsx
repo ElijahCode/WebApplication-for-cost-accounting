@@ -118,11 +118,23 @@ describe("Testing CategoryTable Component", () => {
     category4.cost = costItem4.cost;
     category4.costHistory.push({ ...costItem4 });
 
-    const categories = [category1, category2, category3, category4];
+    // const categories = [
+    //   {...category1, costHistory: [...category1.costHistory]},
+    //   {...category2, costHistory: [...category2.costHistory]},
+    //   {...category3, costHistory: [...category3.costHistory]},
+    //   {...category4, costHistory: [...category4.costHistory]}
+    // ];
 
-    const preloadedState: IState = {
+    let categories = [
+      { ...category1 },
+      { ...category2 },
+      { ...category3 },
+      { ...category4 },
+    ];
+
+    let preloadedState: IState = {
       user: "Tester",
-      categoriesOfCost: categories,
+      categoriesOfCost: [...categories],
     };
 
     let store = configureStore({
@@ -141,6 +153,18 @@ describe("Testing CategoryTable Component", () => {
     });
 
     afterEach(() => {
+      categories = [
+        { ...category1 },
+        { ...category2 },
+        { ...category3 },
+        { ...category4 },
+      ];
+
+      preloadedState = {
+        user: "Tester",
+        categoriesOfCost: [...categories],
+      };
+
       store = configureStore({
         reducer,
         preloadedState,
@@ -172,6 +196,12 @@ describe("Testing CategoryTable Component", () => {
 
       expect(store.getState().categoriesOfCost.length).toBe(6);
       expect(screen.getAllByTestId("categoryItemSubBlock").length).toBe(6);
+
+      userEvent.type(screen.getByTestId("addCategoryNameInput"), "Category7");
+      userEvent.click(screen.getByTestId("addCategoryButton"));
+
+      expect(store.getState().categoriesOfCost.length).toBe(7);
+      expect(screen.getAllByTestId("categoryItemSubBlock").length).toBe(7);
     });
 
     it("Testing changing category name", () => {
@@ -202,6 +232,29 @@ describe("Testing CategoryTable Component", () => {
       expect(
         screen.queryByTestId("ChangeCategoryNameMainButton")
       ).not.toBeInTheDocument();
+    });
+
+    it("Testing deleting category", () => {
+      userEvent.click(screen.getAllByTestId("DeleteCategoryButton")[3]);
+
+      expect(store.getState().categoriesOfCost.length).toBe(3);
+      expect(screen.getAllByTestId("categoryItemSubBlock").length).toBe(3);
+
+      userEvent.click(screen.getAllByTestId("DeleteCategoryButton")[2]);
+
+      expect(store.getState().categoriesOfCost.length).toBe(2);
+      expect(screen.getAllByTestId("categoryItemSubBlock").length).toBe(2);
+      expect(store.getState().categoriesOfCost[0].cost).toBe(
+        category1.cost - category3.cost
+      );
+      expect(store.getState().categoriesOfCost[1].cost).toBe(
+        category2.cost - category3.cost
+      );
+
+      userEvent.click(screen.getAllByTestId("DeleteCategoryButton")[0]);
+
+      expect(store.getState().categoriesOfCost.length).toBe(0);
+      expect(screen.queryAllByTestId("categoryItemSubBlock").length).toBe(0);
     });
   });
 });

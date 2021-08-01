@@ -1,5 +1,4 @@
-import React, { ChangeEvent } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import { connect } from "react-redux";
 import { categoryCreator } from "../../ts/categoryCreator/categoryCreator";
 import {
@@ -104,6 +103,42 @@ class CategoryTableWithoutConnect extends React.Component<
     ).value = "";
   };
 
+  deleteCategoryButtonClick = (event: any): void => {
+    const deletedCategoryID = event.target.closest("div").id;
+    const deletedCategory: IStateCategory = this.state.categories.find(
+      (category: IStateCategory) => category.id === deletedCategoryID
+    );
+
+    let newCategories = [...this.state.categories];
+    this.props.deleteCategory(deletedCategory);
+
+    if (deletedCategory.parentID) {
+      const parentCategory: IStateCategory = newCategories.find(
+        (category: IStateCategory) => category.id === deletedCategory.parentID
+      );
+      const parentCategoryCopy = {
+        ...parentCategory,
+        costHistory: [...parentCategory.costHistory],
+      };
+      parentCategoryCopy.cost -= deletedCategory.cost;
+      deletedCategory.costHistory.forEach((costItem: CostHistoryItem) => {
+        parentCategoryCopy.costHistory = parentCategoryCopy.costHistory.filter(
+          (parentCostItem: CostHistoryItem) => parentCostItem.id !== costItem.id
+        );
+      });
+      newCategories = newCategories.filter(
+        (category: IStateCategory) => category.id !== parentCategoryCopy.id
+      );
+      newCategories.push(parentCategoryCopy);
+    }
+
+    this.setState({
+      categories: newCategories.filter(
+        (category: IStateCategory) => category.id !== deletedCategory.id
+      ),
+    });
+  };
+
   renderChildCategories(
     parentCategory: IStateCategory,
     ...parentsIndex: number[]
@@ -136,7 +171,12 @@ class CategoryTableWithoutConnect extends React.Component<
               >
                 Chage category name
               </button>
-              <button>Delete Category</button>
+              <button
+                onClick={this.deleteCategoryButtonClick}
+                data-testid="DeleteCategoryButton"
+              >
+                Delete Category
+              </button>
             </div>
             {child.childs === ""
               ? null
@@ -212,7 +252,12 @@ class CategoryTableWithoutConnect extends React.Component<
                 >
                   Chage category name
                 </button>
-                <button>Delete Category</button>
+                <button
+                  onClick={this.deleteCategoryButtonClick}
+                  data-testid="DeleteCategoryButton"
+                >
+                  Delete Category
+                </button>
               </div>
               {category.childs === ""
                 ? null
