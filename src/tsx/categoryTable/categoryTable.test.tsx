@@ -118,13 +118,6 @@ describe("Testing CategoryTable Component", () => {
     category4.cost = costItem4.cost;
     category4.costHistory.push({ ...costItem4 });
 
-    // const categories = [
-    //   {...category1, costHistory: [...category1.costHistory]},
-    //   {...category2, costHistory: [...category2.costHistory]},
-    //   {...category3, costHistory: [...category3.costHistory]},
-    //   {...category4, costHistory: [...category4.costHistory]}
-    // ];
-
     let categories = [
       { ...category1 },
       { ...category2 },

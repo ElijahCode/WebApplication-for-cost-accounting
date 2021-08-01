@@ -4,9 +4,12 @@ import { About } from "../about/about";
 import { Login } from "../login/login";
 import { Registration } from "../registration/registration";
 import { MainWithOutLogin } from "../main/mainWithOutLogin";
+import { CostTable } from "../costTable/costTable";
+import { CategoryTable } from "../categoryTable/categoryTable";
+import { ChartBlock } from "../chart/chart";
 
 export class App extends React.Component {
-  render() {
+  render(): JSX.Element {
     return (
       <BrowserRouter>
         {" "}
@@ -15,6 +18,9 @@ export class App extends React.Component {
           <Link to="/about">About</Link>
           <Link to="/login">Log in</Link>
           <Link to="/registration">Registration</Link>
+          <Link to="/costTable"></Link>
+          <Link to="/categoryTable"></Link>
+          <Link to="/chart"></Link>
         </div>
         <Switch>
           <Route exact path="/">
@@ -28,6 +34,15 @@ export class App extends React.Component {
           </Route>
           <Route path="/registration">
             <Registration />
+          </Route>
+          <Route path="/costTable">
+            <CostTable />
+          </Route>
+          <Route path="/categoryTable">
+            <CategoryTable />
+          </Route>
+          <Route path="/chart">
+            <ChartBlock />
           </Route>
         </Switch>
       </BrowserRouter>
