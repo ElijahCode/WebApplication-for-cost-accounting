@@ -25,30 +25,14 @@ interface HTMLRawWithKey extends HTMLTableRowElement {
 
 class CostTableWithoutStore extends React.Component<any, ICostTableState> {
   state = {
-    costHistory: this.props.categoriesOfCost.reduce(
-      (acc: CostHistoryItem[], curr: IStateCategory) => {
-        if (curr.parentID === null) {
-          return acc.concat(curr.costHistory);
-        }
-        return acc;
-      },
-      []
-    ),
+    costHistory: this.setDefaultCostHistoryValues(),
     beginDate: this.setDefaultBeginDate(),
     lastDate: this.setDefaultLastDate(),
     addCostCost: 0,
     addCostDate: Date.now(),
     addCostCategoryName: "",
     addCostDateInputValue: this.setDefaultDateForAddCost(),
-    renderingCosts: this.props.categoriesOfCost.reduce(
-      (acc: CostHistoryItem[], curr: IStateCategory) => {
-        if (curr.parentID === null) {
-          return acc.concat(curr.costHistory);
-        }
-        return acc;
-      },
-      []
-    ),
+    renderingCosts: this.setDefaultCostHistoryValues(),
   };
 
   private setDefaultBeginDate() {
@@ -84,6 +68,22 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
         ? `${toDayDate.getMinutes()}`
         : `0${toDayDate.getMinutes()}`;
     return `${day}.${month}.${year} ${hour}:${minutes}`;
+  }
+
+  setDefaultCostHistoryValues(): CostHistoryItem[] {
+    let result: CostHistoryItem[] = [];
+    if (this.props.categoriesOfCost !== []) {
+      result = this.props.categoriesOfCost.reduce(
+        (acc: CostHistoryItem[], curr: IStateCategory) => {
+          if (curr.parentID === null) {
+            return acc.concat(curr.costHistory);
+          }
+          return acc;
+        },
+        []
+      );
+    }
+    return result;
   }
 
   onAddCostChange = (event: ChangeEvent): void => {
@@ -264,51 +264,55 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
             Add task
           </button>
         </div>
-        <table data-testid="CostTable">
-          <tbody>
-            {this.state.renderingCosts.map((costItem: CostHistoryItem) => {
-              const costDate = new Date(costItem.date);
-              const costDateMinutes =
-                costDate.getMinutes() > 9
-                  ? costDate.getMinutes()
-                  : `0${costDate.getMinutes()}`;
-              const costDateHours =
-                costDate.getHours() > 9
-                  ? costDate.getHours()
-                  : `0${costDate.getHours()}`;
-              const costDateDay =
-                costDate.getDate() > 9
-                  ? costDate.getDate()
-                  : `0${costDate.getDate()}`;
-              const costDateMonth =
-                costDate.getMonth() > 9
-                  ? costDate.getMonth()
-                  : `0${costDate.getMonth()}`;
-              const renderCostDate = `${costDateDay}.${costDateMonth}.${costDate.getFullYear()} ${costDateHours}:${costDateMinutes}`;
-              return (
-                <tr
-                  id={costItem.id}
-                  key={costItem.id}
-                  data-testid="tableString"
-                >
-                  <td data-testid="costName">{costItem.cost}</td>
-                  <td data-testid="costDate">{renderCostDate}</td>
-                  <td>
-                    <button data-testid="buttonChagneCost">Change cost</button>
-                  </td>
-                  <td>
-                    <button
-                      onClick={this.deleteCostButtonClick}
-                      data-testid="buttonDeleteCost"
-                    >
-                      Delete cost
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        {this.state.renderingCosts !== [] && (
+          <table data-testid="CostTable">
+            <tbody>
+              {this.state.renderingCosts.map((costItem: CostHistoryItem) => {
+                const costDate = new Date(costItem.date);
+                const costDateMinutes =
+                  costDate.getMinutes() > 9
+                    ? costDate.getMinutes()
+                    : `0${costDate.getMinutes()}`;
+                const costDateHours =
+                  costDate.getHours() > 9
+                    ? costDate.getHours()
+                    : `0${costDate.getHours()}`;
+                const costDateDay =
+                  costDate.getDate() > 9
+                    ? costDate.getDate()
+                    : `0${costDate.getDate()}`;
+                const costDateMonth =
+                  costDate.getMonth() > 9
+                    ? costDate.getMonth()
+                    : `0${costDate.getMonth()}`;
+                const renderCostDate = `${costDateDay}.${costDateMonth}.${costDate.getFullYear()} ${costDateHours}:${costDateMinutes}`;
+                return (
+                  <tr
+                    id={costItem.id}
+                    key={costItem.id}
+                    data-testid="tableString"
+                  >
+                    <td data-testid="costName">{costItem.cost}</td>
+                    <td data-testid="costDate">{renderCostDate}</td>
+                    <td>
+                      <button data-testid="buttonChagneCost">
+                        Change cost
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        onClick={this.deleteCostButtonClick}
+                        data-testid="buttonDeleteCost"
+                      >
+                        Delete cost
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
     );
     return layout;

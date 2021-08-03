@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createReducer } from "@reduxjs/toolkit";
 import {
+  setAllState,
   setUserName,
   addCategory,
   addCost,
@@ -17,6 +18,7 @@ const initState: IState = {
 
 export const reducer = createReducer(initState, (builder) => {
   builder
+    .addCase(setAllState, (state, action) => action.payload)
     .addCase(setUserName, (state, action) => {
       const newState = { ...state };
       newState.user = action.payload;

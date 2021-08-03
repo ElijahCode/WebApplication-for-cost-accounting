@@ -1,4 +1,7 @@
+import firebase from "firebase";
 import React from "react";
+import { connect } from "react-redux";
+import { setAllState, setUserName } from "../../ts/reducer/actions";
 
 interface LoginState {
   login: string;
@@ -6,14 +9,35 @@ interface LoginState {
   buttonIsClicked: boolean;
 }
 
-export class Login extends React.Component<
-  Record<string, unknown>,
-  LoginState
-> {
+class LoginWithoutConnect extends React.Component<any, LoginState> {
   state = {
     login: "",
     password: "",
     buttonIsClicked: false,
+  };
+
+  googleAuthentification = async (): Promise<void> => {
+    const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+    await firebase.auth().signInWithPopup(googleAuthProvider);
+    await this.setOrCreateStore();
+  };
+
+  setOrCreateStore = async (): Promise<void> => {
+    const userId = (firebase.auth().currentUser as firebase.User).uid;
+    this.props.setUserName(userId);
+    let categoriesOfCost = await firebase
+      .database()
+      .ref(`users/${userId}`)
+      .get()
+      .then((snap) => snap.val());
+    if (!categoriesOfCost) {
+      categoriesOfCost = [];
+    }
+    const state: IState = {
+      user: userId,
+      categoriesOfCost,
+    };
+    this.props.setAllState(state);
   };
 
   loginInputChange = (ev: React.ChangeEvent): void => {
@@ -47,6 +71,7 @@ export class Login extends React.Component<
   render(): JSX.Element {
     return (
       <div className="loginBlock" data-testid="loginWrapper">
+        <button onClick={this.googleAuthentification}>Login with Google</button>
         <p>Enter login and password for enter in application</p>
         <p>Login:</p>
         <input
@@ -79,3 +104,16 @@ export class Login extends React.Component<
     );
   }
 }
+
+const mapStateToProps = (state: IState) => ({
+  currentUser: state.user,
+});
+const mapDispatchToProps = {
+  setAllState,
+  setUserName,
+};
+
+export const Login = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginWithoutConnect);

@@ -1,5 +1,7 @@
 import { createAction } from "@reduxjs/toolkit";
 
+export const setAllState = createAction<IState>("state/set");
+
 export const setUserName = createAction<string>("username/set");
 
 export const addCategory = createAction<IStateCategory>("category/add");
