@@ -112,7 +112,7 @@ class CategoryTableWithoutConnect extends React.Component<
     let newCategories = [...this.state.categories];
     this.props.deleteCategory(deletedCategory);
 
-    if (deletedCategory.parentID) {
+    if (deletedCategory.parentID !== "") {
       const parentCategory: IStateCategory = newCategories.find(
         (category: IStateCategory) => category.id === deletedCategory.parentID
       );
@@ -190,8 +190,11 @@ class CategoryTableWithoutConnect extends React.Component<
   }
 
   render(): JSX.Element {
+    if (this.props.categoriesOfCost[0]) {
+      console.log(this.props.categoriesOfCost[0].parentID);
+    }
     const rootCategories = this.state.categories.filter(
-      (category: IStateCategory) => category.parentID === null
+      (category: IStateCategory) => category.parentID === ""
     );
     const layout = (
       <div data-testid="CategoryTableBlock">

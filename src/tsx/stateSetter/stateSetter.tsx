@@ -9,11 +9,13 @@ class StateSetterWithoutConnect extends React.Component<
 > {
   setState = async (): Promise<void> => {
     const userId = (firebase.auth().currentUser as firebase.User).uid;
-    let categoriesOfCost = await firebase
-      .database()
-      .ref(`users/${userId}`)
-      .get()
-      .then((snap) => snap.val());
+    let categoriesOfCost = JSON.parse(
+      await firebase
+        .database()
+        .ref(`users/${userId}`)
+        .get()
+        .then((snap) => snap.val())
+    );
     if (categoriesOfCost === null) {
       categoriesOfCost = [];
     }
@@ -24,7 +26,6 @@ class StateSetterWithoutConnect extends React.Component<
   };
 
   componentDidMount = async (): Promise<void> => {
-    console.log("WAAAAAAAAAAAAAAAAAAAGGGGGGGGHHHHHHHHHHHHH");
     await this.setState();
   };
 

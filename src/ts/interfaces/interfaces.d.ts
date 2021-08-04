@@ -9,7 +9,7 @@ declare interface IStateCategory {
   cost: number;
   id: string;
   costHistory: CostHistoryItem[];
-  parentID: string | null;
+  parentID: string;
   childs: string;
 }
 

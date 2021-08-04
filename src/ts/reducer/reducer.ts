@@ -30,7 +30,7 @@ export const reducer = createReducer(initState, (builder) => {
         ...action.payload,
       };
 
-      if (category.parentID !== null) {
+      if (category.parentID !== "") {
         const parentCategory = newState.categoriesOfCost.filter(
           (el) => el.id === category.parentID
         )[0];
@@ -70,7 +70,7 @@ export const reducer = createReducer(initState, (builder) => {
             return flag;
           }
         );
-        if (parentCategory.parentID) {
+        if (parentCategory.parentID !== "") {
           deleteFromParentsCost(parentCategory.parentID);
         }
       }
@@ -92,7 +92,7 @@ export const reducer = createReducer(initState, (builder) => {
           });
       }
 
-      if (category.parentID) {
+      if (category.parentID !== "") {
         const parentCategory = newCategoriesOfCost.find(
           (categ) => categ.id === category.parentID
         ) as IStateCategory;
@@ -123,12 +123,12 @@ export const reducer = createReducer(initState, (builder) => {
         ) as IStateCategory;
         parentCategory.cost += action.payload.costItem.cost;
         parentCategory.costHistory.push(action.payload.costItem);
-        if (parentCategory.parentID) {
+        if (parentCategory.parentID !== "") {
           addToParentsCost(parentCategory.parentID);
         }
       }
 
-      if (category.parentID) {
+      if (category.parentID !== "") {
         addToParentsCost(category.parentID);
       }
     })

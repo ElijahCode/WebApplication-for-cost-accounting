@@ -7,7 +7,7 @@ export function categoryCreator(name: string): IStateCategory {
     cost: 0,
     id,
     costHistory: [],
-    parentID: null,
+    parentID: "",
     childs: "",
   };
 }

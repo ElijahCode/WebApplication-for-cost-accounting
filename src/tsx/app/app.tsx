@@ -31,12 +31,9 @@ const store = configureStore({
 
 store.subscribe(async () => {
   const { user, categoriesOfCost } = store.getState();
-  console.log((firebase.auth().currentUser as firebase.User).uid);
-  console.log("user ", user);
-  console.log(categoriesOfCost);
   const dataBase = firebase.database();
-  if (categoriesOfCost !== []) {
-    await dataBase.ref(`users/${user}`).set(categoriesOfCost);
+  if (categoriesOfCost.length !== 0) {
+    await dataBase.ref(`users/${user}`).set(JSON.stringify(categoriesOfCost));
   }
 });
 
