@@ -73,9 +73,9 @@ describe("Testing costTable component", () => {
       expect(screen.getByTestId("DateBlock")).toBeInTheDocument();
       expect(screen.getByTestId("ShowCostParag")).toBeInTheDocument();
       expect(screen.getByTestId("AllLink")).toBeInTheDocument();
+      expect(screen.getByTestId("DayLink")).toBeInTheDocument();
       expect(screen.getByTestId("WeekLink")).toBeInTheDocument();
       expect(screen.getByTestId("MonthLink")).toBeInTheDocument();
-      expect(screen.getByTestId("YearLink")).toBeInTheDocument();
     });
 
     it("Contain add cost block", () => {
@@ -278,6 +278,10 @@ describe("Testing costTable component", () => {
     });
 
     it("Correct filter cost list when link is clicked", () => {
+      userEvent.click(screen.getByTestId("DayLink"));
+
+      expect(screen.getAllByTestId("tableString").length).toBe(1);
+
       userEvent.click(screen.getByTestId("WeekLink"));
 
       expect(screen.getAllByTestId("tableString").length).toBe(2);
@@ -285,10 +289,6 @@ describe("Testing costTable component", () => {
       userEvent.click(screen.getByTestId("MonthLink"));
 
       expect(screen.getAllByTestId("tableString").length).toBe(3);
-
-      userEvent.click(screen.getByTestId("YearLink"));
-
-      expect(screen.getAllByTestId("tableString").length).toBe(4);
 
       userEvent.click(screen.getByTestId("WeekLink"));
       userEvent.click(screen.getByTestId("AllLink"));

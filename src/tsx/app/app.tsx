@@ -87,13 +87,28 @@ export class App extends React.Component {
                 <Route path="/cost_table_for last month">
                   <CostTable />
                 </Route>
-                <Route path="/cost_table_for_last_year">
+                <Route path="/cost_table_variable_date">
                   <CostTable />
                 </Route>
                 <Route path="/categoryTable">
                   <CategoryTable />
                 </Route>
                 <Route path="/chart">
+                  <ChartBlock />
+                </Route>
+                <Route path="/chart_all">
+                  <ChartBlock />
+                </Route>
+                <Route path="/chart_for_day">
+                  <ChartBlock />
+                </Route>
+                <Route path="/chart_for_last_week">
+                  <ChartBlock />
+                </Route>
+                <Route path="/chart_for_last_month">
+                  <ChartBlock />
+                </Route>
+                <Route path={"/chart_variable_date"}>
                   <ChartBlock />
                 </Route>
               </Switch>

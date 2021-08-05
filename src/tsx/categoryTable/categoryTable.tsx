@@ -190,9 +190,6 @@ class CategoryTableWithoutConnect extends React.Component<
   }
 
   render(): JSX.Element {
-    if (this.props.categoriesOfCost[0]) {
-      console.log(this.props.categoriesOfCost[0].parentID);
-    }
     const rootCategories = this.state.categories.filter(
       (category: IStateCategory) => category.parentID === ""
     );

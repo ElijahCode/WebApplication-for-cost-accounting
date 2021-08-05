@@ -17,6 +17,8 @@ interface ICostTableState {
   addCostCategoryName: string;
   addCostDateInputValue: string;
   renderingCosts: CostHistoryItem[];
+  showCostsBeginDate: number;
+  showCostsEndDate: number;
 }
 
 interface HTMLRawWithKey extends HTMLTableRowElement {
@@ -33,6 +35,8 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
     addCostCategoryName: "",
     addCostDateInputValue: this.setDefaultDateForAddCost(),
     renderingCosts: this.setDefaultCostHistoryValues(),
+    showCostsBeginDate: 0,
+    showCostsEndDate: 0,
   };
 
   private setDefaultBeginDate() {
@@ -75,12 +79,6 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
     if (this.props.categoriesOfCost.length !== 0) {
       result = this.props.categoriesOfCost.reduce(
         (acc: CostHistoryItem[], curr: IStateCategory) => {
-          if (curr.costHistory === undefined) {
-            console.log(curr.costHistory);
-            // eslint-disable-next-line no-param-reassign
-            curr.costHistory = [];
-            return acc;
-          }
           if (curr.parentID === "") {
             return acc.concat(curr.costHistory);
           }
@@ -197,15 +195,119 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
     });
   };
 
-  onLastYearLinkClick = (): void => {
+  onDayLinkClick = (): void => {
     const todayDate = new Date(Date.now());
-    const yearAgo = todayDate
-      .setFullYear(todayDate.getFullYear() - 1)
-      .valueOf();
+    const toDayBegin = new Date(
+      todayDate.getFullYear(),
+      todayDate.getMonth(),
+      todayDate.getDate()
+    ).valueOf();
+    const toDayEnd = new Date(
+      todayDate.getFullYear(),
+      todayDate.getMonth(),
+      todayDate.getDate() + 1
+    ).valueOf();
     this.setState({
       renderingCosts: this.state.costHistory.filter(
-        (costItem: CostHistoryItem) => costItem.date >= yearAgo
+        (costItem: CostHistoryItem) =>
+          costItem.date >= toDayBegin && costItem.date < toDayEnd
       ),
+    });
+  };
+
+  onBeginDateInputChange = (event: any): void => {
+    const beginDate = (event.target as HTMLInputElement).value;
+    const [beginDatePartDate, beginDateTime] = beginDate.split(" ");
+    if (beginDatePartDate.split("").length === 10) {
+      const beginDateNormalizedTime =
+        beginDateTime !== undefined ? beginDateTime : "00:00";
+      const beginDateNormalizedPartDate = beginDatePartDate
+        .split(".")
+        .reverse()
+        .join("-");
+      const beginDateResultPartDate = [
+        beginDateNormalizedPartDate,
+        beginDateNormalizedTime,
+      ].join("T");
+      const beginDateResultDate = new Date(
+        Date.parse(beginDateResultPartDate)
+      ).valueOf();
+
+      this.setState({
+        showCostsBeginDate: beginDateResultDate,
+      });
+    }
+  };
+
+  onEndDateInputChange = (event: any): void => {
+    const endDate = (event.target as HTMLButtonElement).value;
+    const [endDatePartDate, endDateTime] = endDate.split(" ");
+    if (endDatePartDate.split("").length) {
+      const endDateNormalizedTime =
+        endDateTime !== undefined ? endDateTime : "00:00";
+      const endDateNormalizedPartDate = endDatePartDate
+        .split(".")
+        .reverse()
+        .join("-");
+      const endDateResultPartDate = [
+        endDateNormalizedPartDate,
+        endDateNormalizedTime,
+      ].join("T");
+      const endDateResultDate = new Date(
+        Date.parse(endDateResultPartDate)
+      ).valueOf();
+
+      this.setState({
+        showCostsEndDate: endDateResultDate,
+      });
+    }
+  };
+
+  onArbitratyTimePeriodLinkClick = (): void => {
+    const beginDate = (
+      document.querySelector(".costTable_date-begin-input") as HTMLInputElement
+    ).value;
+    const [beginDatePartDate, beginDateTime] = beginDate.split(" ");
+    const beginDateNormalizedTime =
+      beginDateTime !== undefined ? beginDateTime : "00:00";
+    const beginDateNormalizedPartDate = beginDatePartDate
+      .split(".")
+      .reverse()
+      .join("-");
+    const beginDateResultPartDate = [
+      beginDateNormalizedPartDate,
+      beginDateNormalizedTime,
+    ].join("T");
+    const beginDateResultDate = new Date(
+      Date.parse(beginDateResultPartDate)
+    ).valueOf();
+
+    const endDate = (
+      document.querySelector(".costTable_date-end-input") as HTMLButtonElement
+    ).value;
+    const [endDatePartDate, endDateTime] = endDate.split(" ");
+    const endDateNormalizedTime =
+      endDateTime !== undefined ? endDateTime : "00:00";
+    const endDateNormalizedPartDate = endDatePartDate
+      .split(".")
+      .reverse()
+      .join("-");
+    const endDateResultPartDate = [
+      endDateNormalizedPartDate,
+      endDateNormalizedTime,
+    ].join("T");
+    const endDateResultDate = new Date(
+      Date.parse(endDateResultPartDate)
+    ).valueOf();
+
+    this.setState({
+      renderingCosts: this.state.costHistory.filter(
+        (costItem: CostHistoryItem) =>
+          costItem.date >= beginDateResultDate &&
+          costItem.date < endDateResultDate
+      ),
+      showCostsBeginDate: beginDateResultDate,
+      showCostsEndDate: endDateResultDate,
     });
   };
 
@@ -222,6 +324,13 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
             All
           </Link>
           <Link
+            onClick={this.onDayLinkClick}
+            to="/cost_table_for_day"
+            data-testid="DayLink"
+          >
+            For day
+          </Link>
+          <Link
             onClick={this.onLastWeekLinkClick}
             to="/cost_table_for_last_week"
             data-testid="WeekLink"
@@ -235,12 +344,28 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
           >
             For last month
           </Link>
+          For an arbitrary period of time
+          <p>Begin date:</p>
+          <input
+            type="text"
+            onChange={this.onBeginDateInputChange}
+            className={"costTable_date-begin-input"}
+            data-testid="dateBeginInput"
+          />
+          <p>End date:</p>
+          <input
+            type="text"
+            onChange={this.onEndDateInputChange}
+            className={"costTable_date-end-input"}
+            data-testid="dateEndInput"
+          />
           <Link
-            onClick={this.onLastYearLinkClick}
-            to="/cost_table_for_last_year"
-            data-testid="YearLink"
+            to={`/cost_table_variable_date/${this.state.showCostsBeginDate}-${this.state.showCostsEndDate}`}
+            data-testid="VariableDateLink"
           >
-            For last year
+            <button onClick={this.onArbitratyTimePeriodLinkClick}>
+              Find costs
+            </button>
           </Link>
         </div>
         <div data-testid="addCostBlock">
@@ -275,7 +400,6 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
             <tbody>
               {this.state.renderingCosts.map(
                 (costItem: CostHistoryItem | undefined) => {
-                  console.log(this.state.renderingCosts);
                   if (costItem === undefined) {
                     return null;
                   }
@@ -294,8 +418,8 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
                       : `0${costDate.getDate()}`;
                   const costDateMonth =
                     costDate.getMonth() > 9
-                      ? costDate.getMonth()
-                      : `0${costDate.getMonth()}`;
+                      ? costDate.getMonth() + 1
+                      : `0${costDate.getMonth() + 1}`;
                   const renderCostDate = `${costDateDay}.${costDateMonth}.${costDate.getFullYear()} ${costDateHours}:${costDateMinutes}`;
                   return (
                     <tr
