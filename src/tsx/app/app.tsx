@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Link, Switch, Redirect } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import firebase from "firebase";
@@ -13,6 +13,7 @@ import { firebaseConfig } from "../../fireBaseConfig";
 import { About } from "../about/about";
 import { Login } from "../login/login";
 import { MainWithOutLogin } from "../main/mainWithOutLogin";
+import { MainWithLogin } from "../main/mainWithLogin";
 import { CostTable } from "../costTable/costTable";
 import { CategoryTable } from "../categoryTable/categoryTable";
 import { ChartBlock } from "../chart/chart";
@@ -49,12 +50,18 @@ export class App extends React.Component {
                 <Link to="/">Home</Link>
                 <Link to="/about">About</Link>
                 <IfFirebaseUnAuthed>
-                  {() => <Link to="/login">Log in</Link>}
+                  {() => (
+                    <>
+                      <Link to="/login">Log in</Link>
+                      <Redirect to="/login"></Redirect>
+                    </>
+                  )}
                 </IfFirebaseUnAuthed>
                 <IfFirebaseAuthed>
                   {() => (
                     <>
                       <StateSetter />
+                      <Redirect to="/"></Redirect>
                       <Link to="/costTable">Costs Table</Link>
                       <Link to="/categoryTable">Categories Table</Link>
                       <Link to="/chart">Chart</Link>
@@ -67,7 +74,10 @@ export class App extends React.Component {
               </div>
               <Switch>
                 <Route exact path="/">
-                  <MainWithOutLogin />
+                  <IfFirebaseAuthed>{() => <MainWithLogin />}</IfFirebaseAuthed>
+                  <IfFirebaseUnAuthed>
+                    {() => <MainWithOutLogin />}
+                  </IfFirebaseUnAuthed>
                 </Route>
                 <Route path="/about">
                   <About />

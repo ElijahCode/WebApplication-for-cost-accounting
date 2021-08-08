@@ -9,7 +9,7 @@ class StateSetterWithoutConnect extends React.Component<
 > {
   setState = async (): Promise<void> => {
     const userId = (firebase.auth().currentUser as firebase.User).uid;
-    let categoriesOfCost = JSON.parse(
+    let categoriesOfCost = await JSON.parse(
       await firebase
         .database()
         .ref(`users/${userId}`)
@@ -19,6 +19,7 @@ class StateSetterWithoutConnect extends React.Component<
     if (categoriesOfCost === null) {
       categoriesOfCost = [];
     }
+
     this.props.setAllState({
       user: userId,
       categoriesOfCost,
