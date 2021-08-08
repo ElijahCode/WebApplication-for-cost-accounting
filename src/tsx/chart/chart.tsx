@@ -1,7 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, ConnectedProps } from "react-redux";
 import Chart from "react-google-charts";
+
+const mapStateToProps = (state: IState) => ({
+  categoriesOfCost: state.categoriesOfCost,
+});
+
+const ChartBlockConnector = connect(mapStateToProps);
+
+type IChartBlockProps = ConnectedProps<typeof ChartBlockConnector>;
 
 type ChartData = [string, string | number];
 
@@ -12,7 +20,10 @@ interface IChartBlockState {
   showCostsEndDate: number;
 }
 
-class ChartBlockWithoutStore extends React.Component<any, IChartBlockState> {
+class ChartBlockWithoutStore extends React.Component<
+  IChartBlockProps,
+  IChartBlockState
+> {
   state = {
     categories: this.props.categoriesOfCost,
     chartData: this.props.categoriesOfCost.reduce(
@@ -135,7 +146,7 @@ class ChartBlockWithoutStore extends React.Component<any, IChartBlockState> {
     });
   };
 
-  onBeginDateInputChange = (event: any): void => {
+  onBeginDateInputChange = (event: React.ChangeEvent): void => {
     const beginDate = (event.target as HTMLInputElement).value;
     const [beginDatePartDate, beginDateTime] = beginDate.split(" ");
     if (beginDatePartDate.split("").length === 10) {
@@ -159,7 +170,7 @@ class ChartBlockWithoutStore extends React.Component<any, IChartBlockState> {
     }
   };
 
-  onEndDateInputChange = (event: any): void => {
+  onEndDateInputChange = (event: React.ChangeEvent): void => {
     const endDate = (event.target as HTMLButtonElement).value;
     const [endDatePartDate, endDateTime] = endDate.split(" ");
     if (endDatePartDate.split("").length) {
@@ -321,8 +332,4 @@ class ChartBlockWithoutStore extends React.Component<any, IChartBlockState> {
   }
 }
 
-const mapStateToProps = (state: IState) => ({
-  categoriesOfCost: state.categoriesOfCost,
-});
-
-export const ChartBlock = connect(mapStateToProps)(ChartBlockWithoutStore);
+export const ChartBlock = ChartBlockConnector(ChartBlockWithoutStore);

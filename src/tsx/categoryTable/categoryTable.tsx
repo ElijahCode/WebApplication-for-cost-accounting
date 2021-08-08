@@ -1,11 +1,24 @@
 import React from "react";
-import { connect } from "react-redux";
+import { connect, ConnectedProps } from "react-redux";
 import { categoryCreator } from "../../ts/categoryCreator/categoryCreator";
 import {
   addCategory,
   changeCategoryName,
   deleteCategory,
 } from "../../ts/reducer/actions";
+
+const mapStateToProps = (state: IState) => ({
+  categoriesOfCost: state.categoriesOfCost,
+});
+const mapDispatchToProps = {
+  addCategory,
+  changeCategoryName,
+  deleteCategory,
+};
+
+const CategoryTableConnector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof CategoryTableConnector>;
 
 interface ICategoryTableState {
   categories: IStateCategory[];
@@ -14,7 +27,7 @@ interface ICategoryTableState {
 }
 
 class CategoryTableWithoutConnect extends React.Component<
-  any,
+  PropsFromRedux,
   ICategoryTableState
 > {
   state = {
@@ -23,14 +36,20 @@ class CategoryTableWithoutConnect extends React.Component<
     changedCategoryID: "",
   };
 
-  addCategoryButtonClick = (event: any): void => {
-    const closestDiv: HTMLDivElement = event.target.closest("div");
+  addCategoryButtonClick = (event: React.MouseEvent): void => {
+    const closestDiv = (event.target as HTMLButtonElement).closest(
+      "div"
+    ) as HTMLDivElement;
     if (closestDiv.matches(".category_Item_SubBlock")) {
-      const categoryID = event.target.closest("div").id;
+      const categoryID = (
+        (event.target as HTMLButtonElement).closest("div") as HTMLDivElement
+      ).id;
       (
         document.querySelector(".addCategory_ParentInput") as HTMLInputElement
-      ).value = this.state.categories.find(
-        (category: IStateCategory) => category.id === categoryID
+      ).value = (
+        this.state.categories.find(
+          (category: IStateCategory) => category.id === categoryID
+        ) as IStateCategory
       ).name;
     }
     if (closestDiv.matches(".addCategory_Block")) {
@@ -44,7 +63,7 @@ class CategoryTableWithoutConnect extends React.Component<
       if (parentName !== "") {
         const parentCategory = this.state.categories.find(
           (categ: IStateCategory) => categ.name === parentName
-        );
+        ) as IStateCategory;
         category.parentID = parentCategory.id;
       }
       this.props.addCategory(category);
@@ -69,8 +88,10 @@ class CategoryTableWithoutConnect extends React.Component<
     }
   };
 
-  changeCategoryNameButtonClick = (event: any): void => {
-    const categoryID = event.target.closest("div").id;
+  changeCategoryNameButtonClick = (event: React.MouseEvent): void => {
+    const categoryID = (
+      (event.target as HTMLButtonElement).closest("div") as HTMLDivElement
+    ).id;
     this.setState({
       isChangeCategoryNameButtonClicked: true,
       changedCategoryID: categoryID,
@@ -82,10 +103,10 @@ class CategoryTableWithoutConnect extends React.Component<
       document.querySelector(".changeCategory_nameInput") as HTMLInputElement
     ).value;
     const changedCategory = {
-      ...this.state.categories.find(
+      ...(this.state.categories.find(
         (category: IStateCategory) =>
           category.id === this.state.changedCategoryID
-      ),
+      ) as IStateCategory),
     };
     this.props.changeCategoryName({
       newName,
@@ -105,19 +126,21 @@ class CategoryTableWithoutConnect extends React.Component<
     ).value = "";
   };
 
-  deleteCategoryButtonClick = (event: any): void => {
-    const deletedCategoryID = event.target.closest("div").id;
-    const deletedCategory: IStateCategory = this.state.categories.find(
+  deleteCategoryButtonClick = (event: React.MouseEvent): void => {
+    const deletedCategoryID = (
+      (event.target as HTMLButtonElement).closest("div") as HTMLDivElement
+    ).id;
+    const deletedCategory = this.state.categories.find(
       (category: IStateCategory) => category.id === deletedCategoryID
-    );
+    ) as IStateCategory;
 
     let newCategories = [...this.state.categories];
     this.props.deleteCategory(deletedCategory);
 
     if (deletedCategory.parentID !== "") {
-      const parentCategory: IStateCategory = newCategories.find(
+      const parentCategory = newCategories.find(
         (category: IStateCategory) => category.id === deletedCategory.parentID
-      );
+      ) as IStateCategory;
       const parentCategoryCopy = {
         ...parentCategory,
         costHistory: [...parentCategory.costHistory],
@@ -275,16 +298,6 @@ class CategoryTableWithoutConnect extends React.Component<
   }
 }
 
-const mapStateToProps = (state: IState) => ({
-  categoriesOfCost: state.categoriesOfCost,
-});
-const mapDispatchToProps = {
-  addCategory,
-  changeCategoryName,
-  deleteCategory,
-};
-
-export const CategoryTable = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CategoryTableWithoutConnect);
+export const CategoryTable = CategoryTableConnector(
+  CategoryTableWithoutConnect
+);

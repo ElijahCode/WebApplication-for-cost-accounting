@@ -1,12 +1,24 @@
 import React, { ChangeEvent } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, ConnectedProps } from "react-redux";
 import { createCostItem } from "../../ts/createCostItem/createCostITem";
 import { addCost, deleteCost } from "../../ts/reducer/actions";
 
-interface ICostTableProps {
-  costHistory: CostHistoryItem[];
-}
+const mapStateToProps = (state: IState) => ({
+  categoriesOfCost: state.categoriesOfCost,
+});
+const mapDispatchToProps = {
+  addCost,
+  deleteCost,
+};
+
+const CostTableConnector = connect(mapStateToProps, mapDispatchToProps);
+
+type CostTablePropsFromConnector = ConnectedProps<typeof CostTableConnector>;
+
+// interface ICostTableProps extends CostTablePropsFromConnector {
+//   costHistory: CostHistoryItem[];
+// }
 
 interface ICostTableState {
   costHistory: CostHistoryItem[];
@@ -25,7 +37,10 @@ interface HTMLRawWithKey extends HTMLTableRowElement {
   key: string;
 }
 
-class CostTableWithoutStore extends React.Component<any, ICostTableState> {
+class CostTableWithoutStore extends React.Component<
+  CostTablePropsFromConnector,
+  ICostTableState
+> {
   state = {
     costHistory: this.setDefaultCostHistoryValues(),
     beginDate: this.setDefaultBeginDate(),
@@ -145,12 +160,14 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
     });
   };
 
-  deleteCostButtonClick = (event: any): void => {
+  deleteCostButtonClick = (event: React.MouseEvent): void => {
     const target = event.target as HTMLButtonElement;
     const stringTable = target.closest("tr") as HTMLRawWithKey;
-    const costId = stringTable.getAttribute("id");
+    const costId = stringTable.getAttribute("id") as string;
     this.props.deleteCost(
-      this.state.costHistory.find((cost: CostHistoryItem) => cost.id === costId)
+      this.state.costHistory.find(
+        (cost: CostHistoryItem) => cost.id === costId
+      ) as CostHistoryItem
     );
     const newCostHistory = this.state.costHistory.filter(
       (cost: CostHistoryItem) => cost.id !== costId
@@ -215,7 +232,7 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
     });
   };
 
-  onBeginDateInputChange = (event: any): void => {
+  onBeginDateInputChange = (event: React.ChangeEvent): void => {
     const beginDate = (event.target as HTMLInputElement).value;
     const [beginDatePartDate, beginDateTime] = beginDate.split(" ");
     if (beginDatePartDate.split("").length === 10) {
@@ -239,7 +256,7 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
     }
   };
 
-  onEndDateInputChange = (event: any): void => {
+  onEndDateInputChange = (event: React.ChangeEvent): void => {
     const endDate = (event.target as HTMLButtonElement).value;
     const [endDatePartDate, endDateTime] = endDate.split(" ");
     if (endDatePartDate.split("").length) {
@@ -455,15 +472,4 @@ class CostTableWithoutStore extends React.Component<any, ICostTableState> {
   }
 }
 
-const mapStateToProps = (state: IState) => ({
-  categoriesOfCost: state.categoriesOfCost,
-});
-const mapDispatchToProps = {
-  addCost,
-  deleteCost,
-};
-
-export const CostTable = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CostTableWithoutStore);
+export const CostTable = CostTableConnector(CostTableWithoutStore);

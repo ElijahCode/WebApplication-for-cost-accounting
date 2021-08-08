@@ -1,10 +1,23 @@
 import firebase from "firebase";
 import React from "react";
-import { connect } from "react-redux";
+import { connect, ConnectedProps } from "react-redux";
 import { setAllState, setUserName } from "../../ts/reducer/actions";
 
+const mapStateToProps = (state: IState) => ({
+  categoriesOfCost: state.categoriesOfCost,
+});
+
+const mapDispatchToProps = {
+  setAllState,
+  setUserName,
+};
+
+const StateSetterConnector = connect(mapStateToProps, mapDispatchToProps);
+
+type IStateSetterProps = ConnectedProps<typeof StateSetterConnector>;
+
 class StateSetterWithoutConnect extends React.Component<
-  any,
+  IStateSetterProps,
   Record<string, unknown>
 > {
   setState = async (): Promise<void> => {
@@ -35,15 +48,4 @@ class StateSetterWithoutConnect extends React.Component<
   }
 }
 
-const mapStateToProps = (state: IState) => ({
-  currentUser: state.user,
-});
-const mapDispatchToProps = {
-  setAllState,
-  setUserName,
-};
-
-export const StateSetter = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(StateSetterWithoutConnect);
+export const StateSetter = StateSetterConnector(StateSetterWithoutConnect);
