@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "lint": "prettier --check . && npx eslint . --ext .js,.ts,.tsx && npx tsc --noEmit src/ts/**/*.ts src/tsx/**/*.tsx",
+    "lint": "prettier --check . && npx eslint . --ext .js,.ts,.tsx && npx tsc --jsx react --noEmit --esModuleInterop true  src/tsx/**/*.tsx && npx tsc --esModuleInterop true --noEmit src/ts/**/*.ts",
     "lint:fix": "prettier --write . && eslint . --ext .js,.ts,.tsx --fix",
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
