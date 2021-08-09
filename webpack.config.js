@@ -7,7 +7,6 @@ module.exports = {
   output: {
     filename: "main.js",
     path: path.resolve(__dirname, "dist"),
-    // publicPath: "/Task-calendar-website/",
   },
   devServer: {
     historyApiFallback: true,
@@ -20,10 +19,6 @@ module.exports = {
       template: path.resolve(__dirname, "./src/html/index.html"),
       filename: "index.html",
     }),
-    // new HtmlWebpackPlugin({
-    //   template: path.resolve(__dirname, "./src/html/index.html"),
-    //   filename: "404.html",
-    // }),
     new MiniCssExtractPlugin(),
   ],
   resolve: {
