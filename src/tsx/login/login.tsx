@@ -37,11 +37,12 @@ class LoginWithoutConnect extends React.Component<LoginProps, LoginState> {
   setOrCreateStore = async (): Promise<void> => {
     const userId = (firebase.auth().currentUser as firebase.User).uid;
     this.props.setUserName(userId);
-    let categoriesOfCost = await firebase
+    const dataString = await firebase
       .database()
       .ref(`users/${userId}`)
       .get()
       .then((snap) => snap.val());
+    let categoriesOfCost = JSON.parse(dataString);
     if (!categoriesOfCost) {
       categoriesOfCost = [];
     }

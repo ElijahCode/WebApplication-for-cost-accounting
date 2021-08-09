@@ -27,6 +27,13 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /babel.config.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: "babel-loader",
+        },
+      },
+      {
         test: /\.css$/i,
         use: [MiniCssExtractPlugin.loader, "css-loader"],
       },

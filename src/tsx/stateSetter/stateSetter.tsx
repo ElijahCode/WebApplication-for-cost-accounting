@@ -22,13 +22,12 @@ class StateSetterWithoutConnect extends React.Component<
 > {
   setState = async (): Promise<void> => {
     const userId = (firebase.auth().currentUser as firebase.User).uid;
-    let categoriesOfCost = await JSON.parse(
-      await firebase
-        .database()
-        .ref(`users/${userId}`)
-        .get()
-        .then((snap) => snap.val())
-    );
+    const dataString = await firebase
+      .database()
+      .ref(`users/${userId}`)
+      .get()
+      .then((snap) => snap.val());
+    let categoriesOfCost = JSON.parse(dataString);
     if (categoriesOfCost === null) {
       categoriesOfCost = [];
     }

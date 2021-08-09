@@ -34,7 +34,13 @@ store.subscribe(async () => {
   const { user, categoriesOfCost } = store.getState();
   const dataBase = firebase.database();
   if (categoriesOfCost.length !== 0) {
-    await dataBase.ref(`users/${user}`).set(JSON.stringify(categoriesOfCost));
+    const firebasedata = JSON.parse(
+      await (await dataBase.ref(`users/${user}`).get()).val()
+    );
+    if (JSON.stringify(categoriesOfCost) !== JSON.stringify(firebasedata)) {
+      await dataBase.ref(`users/${user}`).set(null);
+      await dataBase.ref(`users/${user}`).set(JSON.stringify(categoriesOfCost));
+    }
   }
 });
 

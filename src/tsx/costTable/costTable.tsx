@@ -16,10 +16,6 @@ const CostTableConnector = connect(mapStateToProps, mapDispatchToProps);
 
 type CostTablePropsFromConnector = ConnectedProps<typeof CostTableConnector>;
 
-// interface ICostTableProps extends CostTablePropsFromConnector {
-//   costHistory: CostHistoryItem[];
-// }
-
 interface ICostTableState {
   costHistory: CostHistoryItem[];
   beginDate: number;
