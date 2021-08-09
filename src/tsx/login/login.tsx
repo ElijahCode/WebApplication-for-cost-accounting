@@ -1,7 +1,19 @@
 import firebase from "firebase";
 import React from "react";
-import { connect } from "react-redux";
+import { connect, ConnectedProps } from "react-redux";
 import { setAllState, setUserName } from "../../ts/reducer/actions";
+
+const mapStateToProps = (state: IState) => ({
+  currentUser: state.user,
+});
+const mapDispatchToProps = {
+  setAllState,
+  setUserName,
+};
+
+const loginConnector = connect(mapStateToProps, mapDispatchToProps);
+
+type LoginProps = ConnectedProps<typeof loginConnector>;
 
 interface LoginState {
   login: string;
@@ -9,7 +21,7 @@ interface LoginState {
   buttonIsClicked: boolean;
 }
 
-class LoginWithoutConnect extends React.Component<any, LoginState> {
+class LoginWithoutConnect extends React.Component<LoginProps, LoginState> {
   state = {
     login: "",
     password: "",
@@ -49,15 +61,4 @@ class LoginWithoutConnect extends React.Component<any, LoginState> {
   }
 }
 
-const mapStateToProps = (state: IState) => ({
-  currentUser: state.user,
-});
-const mapDispatchToProps = {
-  setAllState,
-  setUserName,
-};
-
-export const Login = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginWithoutConnect);
+export const Login = loginConnector(LoginWithoutConnect);

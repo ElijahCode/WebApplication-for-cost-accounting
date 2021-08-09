@@ -67,15 +67,14 @@ class CategoryTableWithoutConnect extends React.Component<
         category.parentID = parentCategory.id;
       }
       this.props.addCategory(category);
+      const newCategories = [...this.state.categories, category];
       if (parentName !== "") {
-        const parentCategory = {
-          ...this.state.categories.find(
-            (categ: IStateCategory) => categ.name === parentName
-          ),
-        };
+        const parentCategory = newCategories.find(
+          (categ: IStateCategory) => categ.name === parentName
+        ) as IStateCategory;
         parentCategory.childs += `${category.id} `;
       }
-      const newCategories = [...this.state.categories, category];
+
       this.setState({
         categories: newCategories,
       });

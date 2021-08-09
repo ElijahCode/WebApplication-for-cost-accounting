@@ -29,15 +29,6 @@ describe("Testing costTable component", () => {
       { ...costItem4 }
     );
 
-    const costTableProps = {
-      costHistory: [
-        { ...costItem1 },
-        { ...costItem2 },
-        { ...costItem3 },
-        { ...costItem4 },
-      ],
-    };
-
     const preloadedState: IState = {
       user: "Tester",
       categoriesOfCost: [{ ...category }],
@@ -52,7 +43,7 @@ describe("Testing costTable component", () => {
       render(
         <BrowserRouter>
           <Provider store={store}>
-            <CostTable {...costTableProps} />
+            <CostTable />
           </Provider>
         </BrowserRouter>
       );
@@ -171,15 +162,6 @@ describe("Testing costTable component", () => {
       { ...costItem4 }
     );
 
-    const costTableProps = {
-      costHistory: [
-        { ...costItem1 },
-        { ...costItem2 },
-        { ...costItem3 },
-        { ...costItem4 },
-      ],
-    };
-
     const preloadedState: IState = {
       user: "Tester",
       categoriesOfCost: [
@@ -199,7 +181,7 @@ describe("Testing costTable component", () => {
       render(
         <BrowserRouter>
           <Provider store={store}>
-            <CostTable {...costTableProps} />
+            <CostTable />
           </Provider>
         </BrowserRouter>
       );
@@ -326,17 +308,6 @@ describe("Testing costTable component", () => {
     category3.cost = costItem5.cost + costItem6.cost;
     category3.costHistory.push({ ...costItem5 }, { ...costItem6 });
 
-    const costTableProps = {
-      costHistory: [
-        { ...costItem1 },
-        { ...costItem2 },
-        { ...costItem3 },
-        { ...costItem4 },
-        { ...costItem5 },
-        { ...costItem6 },
-      ],
-    };
-
     const categories = [{ ...category1 }, { ...category2 }, { ...category3 }];
 
     const preloadedState: IState = {
@@ -353,7 +324,7 @@ describe("Testing costTable component", () => {
       render(
         <BrowserRouter>
           <Provider store={store}>
-            <CostTable {...costTableProps} />
+            <CostTable />
           </Provider>
         </BrowserRouter>
       );
