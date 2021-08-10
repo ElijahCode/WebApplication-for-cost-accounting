@@ -327,12 +327,13 @@ class CostTableWithoutStore extends React.Component<
   render(): JSX.Element {
     const layout = (
       <div data-testid="CostTableBlock">
-        <div data-testid="DateBlock">
-          <p data-testid="ShowCostParag">Show cost</p>
+        <div className={"costTable_simply-links-block"} data-testid="DateBlock">
+          <p data-testid="ShowCostParag">Show cost:</p>
           <Link
             onClick={this.onAllLinkClick}
             to="/cost_table_all"
             data-testid="AllLink"
+            className={"costTable_link"}
           >
             All
           </Link>
@@ -340,6 +341,7 @@ class CostTableWithoutStore extends React.Component<
             onClick={this.onDayLinkClick}
             to="/cost_table_for_day"
             data-testid="DayLink"
+            className={"costTable_link"}
           >
             For day
           </Link>
@@ -347,6 +349,7 @@ class CostTableWithoutStore extends React.Component<
             onClick={this.onLastWeekLinkClick}
             to="/cost_table_for_last_week"
             data-testid="WeekLink"
+            className={"costTable_link"}
           >
             For last week
           </Link>
@@ -354,10 +357,13 @@ class CostTableWithoutStore extends React.Component<
             onClick={this.onLastMonthLinkClick}
             to="/cost_table_for last month"
             data-testid="MonthLink"
+            className={"costTable_link"}
           >
             For last month
           </Link>
-          For an arbitrary period of time
+        </div>
+        <div className={"costTable_cost-for-time-block"}>
+          Show cost for an arbitrary period of time
           <p>Begin date:</p>
           <input
             type="text"
@@ -376,12 +382,15 @@ class CostTableWithoutStore extends React.Component<
             to={`/cost_table_variable_date/${this.state.showCostsBeginDate}-${this.state.showCostsEndDate}`}
             data-testid="VariableDateLink"
           >
-            <button onClick={this.onArbitratyTimePeriodLinkClick}>
+            <button
+              className={"costTable_find-cost-button"}
+              onClick={this.onArbitratyTimePeriodLinkClick}
+            >
               Find costs
             </button>
           </Link>
         </div>
-        <div data-testid="addCostBlock">
+        <div className={"addCost-add-cost-block"} data-testid="addCostBlock">
           <p data-testid="addCostParag">Cost:</p>
           <input
             type="text"
@@ -404,13 +413,21 @@ class CostTableWithoutStore extends React.Component<
             onChange={this.onAddCostCategoryNameChange}
             data-testid="addCostCategoryNameInput"
           />{" "}
-          <button onClick={this.addCostButtonClick} data-testid="AddCostButton">
-            Add task
+          <button
+            className={"costTable_add-cost-button"}
+            onClick={this.addCostButtonClick}
+            data-testid="AddCostButton"
+          >
+            Add cost
           </button>
         </div>
         {this.state.renderingCosts.length !== 0 && (
-          <table data-testid="CostTable">
+          <table className={"costTable_table"} data-testid="CostTable">
             <tbody>
+              <tr>
+                <th>Value of Cost</th>
+                <th>Date</th>
+              </tr>
               {this.state.renderingCosts.map(
                 (costItem: CostHistoryItem | undefined) => {
                   if (costItem === undefined) {
@@ -442,11 +459,6 @@ class CostTableWithoutStore extends React.Component<
                     >
                       <td data-testid="costName">{costItem.cost}</td>
                       <td data-testid="costDate">{renderCostDate}</td>
-                      <td>
-                        <button data-testid="buttonChagneCost">
-                          Change cost
-                        </button>
-                      </td>
                       <td>
                         <button
                           onClick={this.deleteCostButtonClick}

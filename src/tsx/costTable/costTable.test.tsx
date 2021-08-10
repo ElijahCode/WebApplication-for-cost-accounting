@@ -88,7 +88,6 @@ describe("Testing costTable component", () => {
       expect(screen.getAllByTestId("tableString").length).toBe(4);
       expect(screen.getAllByTestId("costName").length).toBe(4);
       expect(screen.getAllByTestId("costDate").length).toBe(4);
-      expect(screen.getAllByTestId("buttonChagneCost").length).toBe(4);
       expect(screen.getAllByTestId("buttonDeleteCost").length).toBe(4);
     });
   });

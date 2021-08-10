@@ -3,5 +3,6 @@ import ReactDOM from "react-dom";
 import { App } from "./tsx/app/app";
 import "../babel.config";
 import "bootswatch/dist/darkly/bootstrap.min.css";
+import "./css/index.css";
 
 ReactDOM.render(<App />, document.querySelector(".root"));

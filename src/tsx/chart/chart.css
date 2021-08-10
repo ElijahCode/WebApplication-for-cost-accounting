@@ -1,0 +1,28 @@
+.chart_simply-links-block {
+  width: 25%;
+  margin: 0 auto 0 auto;
+}
+
+.chart_link {
+  margin: 0 10px 0 10px;
+}
+
+.chart_cost-for-time-block {
+  width: 25%;
+  margin: 0 auto 0 auto;
+}
+
+.chart_find-cost-button {
+  margin: 0 10px 0 10px;
+}
+
+.chart_chart {
+  width: 50vh;
+  height: 50vh;
+  margin: 30px auto 0 auto;
+}
+
+.chart_chart-loader {
+  width: 25%;
+  margin: 30px auto 0 auto;
+}

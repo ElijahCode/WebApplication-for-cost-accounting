@@ -261,12 +261,13 @@ class ChartBlockWithoutStore extends React.Component<
   render(): JSX.Element {
     const layout = (
       <>
-        <div className={"chart-link-block"}>
+        <div className={"chart_simply-links-block"}>
           <p data-testid="ShowCostParag">Show cost</p>
           <Link
             onClick={this.onAllLinkClick}
             to="/chart_all"
             data-testid="AllLink"
+            className={"chart_link"}
           >
             All
           </Link>
@@ -274,6 +275,7 @@ class ChartBlockWithoutStore extends React.Component<
             onClick={this.onDayLinkClick}
             to="/chart_for_day"
             data-testid="DayLink"
+            className={"chart_link"}
           >
             For day
           </Link>
@@ -281,6 +283,7 @@ class ChartBlockWithoutStore extends React.Component<
             onClick={this.onLastWeekLinkClick}
             to="/chart_for_last_week"
             data-testid="WeekLink"
+            className={"chart_link"}
           >
             For last week
           </Link>
@@ -288,9 +291,12 @@ class ChartBlockWithoutStore extends React.Component<
             onClick={this.onLastMonthLinkClick}
             to="/chart_for_last_month"
             data-testid="MonthLink"
+            className={"chart_link"}
           >
             For last month
           </Link>
+        </div>
+        <div className={"chart_cost-for-time-block"}>
           For an arbitrary period of time
           <p>Begin date:</p>
           <input
@@ -310,21 +316,23 @@ class ChartBlockWithoutStore extends React.Component<
             to={`/chart_variable_date/${this.state.showCostsBeginDate}-${this.state.showCostsEndDate}`}
             data-testid="VariableDateLink"
           >
-            <button onClick={this.onArbitratyTimePeriodLinkClick}>
+            <button
+              className={"chart_find-cost-button"}
+              onClick={this.onArbitratyTimePeriodLinkClick}
+            >
               Find costs
             </button>
           </Link>
         </div>
         <Chart
-          width={"500px"}
-          height={"300px"}
           chartType="PieChart"
-          loader={<div>Loading Chart</div>}
+          loader={<div className={"chart_chart-loader"}>Loading Chart</div>}
           data={this.state.chartData}
           options={{
             title: "Cost Categories",
           }}
           rootProps={{ "data-testid": "Chart" }}
+          className={"chart_chart"}
         />
       </>
     );

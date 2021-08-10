@@ -53,12 +53,18 @@ export class App extends React.Component {
             <BrowserRouter>
               {" "}
               <div className="NavBlock">
-                <Link to="/">Home</Link>
-                <Link to="/about">About</Link>
+                <Link className={"app_link"} to="/">
+                  Home
+                </Link>
+                <Link className={"app_link"} to="/about">
+                  About
+                </Link>
                 <IfFirebaseUnAuthed>
                   {() => (
                     <>
-                      <Link to="/login">Log in</Link>
+                      <Link className={"app_link"} to="/login">
+                        Log in
+                      </Link>
                       <Redirect to="/login"></Redirect>
                     </>
                   )}
@@ -68,10 +74,20 @@ export class App extends React.Component {
                     <>
                       <StateSetter />
                       <Redirect to="/"></Redirect>
-                      <Link to="/costTable">Costs Table</Link>
-                      <Link to="/categoryTable">Categories Table</Link>
-                      <Link to="/chart">Chart</Link>
-                      <Link to="/" onClick={() => firebase.auth().signOut()}>
+                      <Link className={"app_link"} to="/costTable">
+                        Costs Table
+                      </Link>
+                      <Link className={"app_link"} to="/categoryTable">
+                        Categories Table
+                      </Link>
+                      <Link className={"app_link"} to="/chart">
+                        Chart
+                      </Link>
+                      <Link
+                        className={"app_link"}
+                        to="/"
+                        onClick={() => firebase.auth().signOut()}
+                      >
                         Log out
                       </Link>
                     </>

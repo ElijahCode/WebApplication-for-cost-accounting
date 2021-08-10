@@ -196,6 +196,7 @@ class CategoryTableWithoutConnect extends React.Component<
               </button>
               <button
                 onClick={this.changeCategoryNameButtonClick}
+                className={"addCategory_change-category-name-button"}
                 data-testid="ChangeCategoryNameButton"
               >
                 Chage category name
@@ -238,13 +239,17 @@ class CategoryTableWithoutConnect extends React.Component<
           />
           <button
             onClick={this.addCategoryButtonClick}
+            className={"addCategory_add-category-button"}
             data-testid="addCategoryButton"
           >
             Add category
           </button>
         </div>
         {this.state.isChangeCategoryNameButtonClicked && (
-          <div data-testid="ChangeCategoryNameBlock">
+          <div
+            className={"addCategory-change-category-name-block"}
+            data-testid="ChangeCategoryNameBlock"
+          >
             <p>Enter new category name:</p>
             <input
               type="text"
@@ -253,13 +258,17 @@ class CategoryTableWithoutConnect extends React.Component<
             />
             <button
               onClick={this.changeCategoryNameMainButtonClick}
+              className={"addCategory_change-category-name-button-main"}
               data-testid="ChangeCategoryNameMainButton"
             >
               Change name
             </button>
           </div>
         )}
-        <div data-testid="CategoriesBlock">
+        <div
+          className={"addCategory_categories-block"}
+          data-testid="CategoriesBlock"
+        >
           {rootCategories.map((category: IStateCategory, index: number) => (
             <div key={category.id}>
               <div
@@ -278,9 +287,10 @@ class CategoryTableWithoutConnect extends React.Component<
                 </button>
                 <button
                   onClick={this.changeCategoryNameButtonClick}
+                  className={"addCategory_change-category-name-button"}
                   data-testid="ChangeCategoryNameButton"
                 >
-                  Chage category name
+                  Change category name
                 </button>
                 <button
                   onClick={this.deleteCategoryButtonClick}
