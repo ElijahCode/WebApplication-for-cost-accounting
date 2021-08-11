@@ -1,0 +1,39 @@
+.costTable_simply-links-block {
+  width: 25%;
+  margin: 0 auto 0 auto;
+}
+
+.costTable_link {
+  margin: 0 10px 0 10px;
+}
+
+.costTable_cost-for-time-block {
+  width: 25%;
+  margin: 0 auto 0 auto;
+}
+
+.costTable_find-cost-button {
+  margin: 0 10px 0 10px;
+}
+
+.addCost-add-cost-block {
+  width: 25%;
+  margin: 30px auto 0 auto;
+}
+
+.costTable_add-cost-button {
+  margin: 0 10px 0 10px;
+}
+
+.costTable_table {
+  width: 50%;
+  margin: 30px auto 0 auto;
+}
+
+th {
+  text-align: center;
+}
+
+td {
+  text-align: center;
+}
